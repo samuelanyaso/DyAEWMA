@@ -1,0 +1,22 @@
+Package: DyAEWMA
+Title: Adaptive EWMA control chart with a Dynamic Sampling Scheme
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Samuel",
+           family = "Anyaso-Samuel",
+           role = c("aut", "cre"),
+           email = "sanyasosamuel@ufl.edu")
+Description: A suite of functions for the adaptive exponentially weighted moving average (EWMA) control chart.
+Depends: R (>= 2.10)
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+LinkingTo: 
+    Rcpp
+Imports: 
+    Rcpp
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

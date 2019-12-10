@@ -1,0 +1,57 @@
+---
+title: "Usage of the DyAEWMA package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DyAEWMA}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```
+library(DyAEWMA)
+```
+Use `DyAEWMA` for process monitoring done with the adaptive exponentially weighted moving average (AEWMA) control chart with a dynamic sampling scheme. The `DyAEWMA` package contains a suite of functions for evaluating and assessing the performance of the AEWMA control chart with a dynamic sampling scheme. This package also provides functions which provide estimation values for the conventional AEWMA chart i.e. where the sampling interval $d(\cdot) = 1$. This package is created for AEWMA control charts designed with $p$-values.
+
+### Installing the package
+To install the package, use
+```
+devtools::install_github("samuelanyaso/DyAEWMA")
+```
+### Computing the Average Run Length and the SD of the run length of the Adaptive EWMA control chart
+This function is based on the adaptive AEWMA control chart proposed by  Haq, Gulzar, and Khoo (2018). A one-sided or two-sided chart can be specified. Along with the SD ARL, the IC ARL is returned if the argument `shift` is set equal to 0, else the out-of-control ARL is returned
+```
+arl(0.5762,0.10,0.0,"two")
+```
+
+### Estimation of the In-Control Empirical Distribution of the Adaptive EWMA Control Chart
+For in-control process observations of size ($n>1$), the `empr_aewma` estimates the in-control empirical distribution of the AEWMA charting statistic using the bootstrap approach.
+```
+empr_aewma(x = rnorm(100,6,2),nsimul = 1000,w = 50)
+```
+
+
+### Computing the $p$-value of the AEWMA charting statistic
+Given the empirical distribution of the charting statistics and the observed charting statistic, the `pVal` function computes the $p$-value of the AEWMA charting statistic.
+```
+empr_dist = empr_aewma(x = rnorm(100,6,2)
+pVal(empr_dist=empr_dist,nsimul = 1000,w = 50),obsStat = 0.62)
+```
+
+### Estimation of the ARL of the AEWMA control chart with $p$-values
+For a given level of significance $\alpha$, the `arl_aewma` function estimates the in-control average run length of the AEWMA control chart designed with $p$-vaues.
+```
+arl_aewma(alpha = 0.025,w = 50,nsimul = 1000, shift=0.0)
+```
+
+### Estimation of the ATS and ARL of the AEWMA control chart with a dynamic sampling scheme
+For a given level of significance $\alpha$ and given parameters of the dynamic sampling interval, the `ats_arl_aewma` function estimates the in-control average time to signal (ATS) and the in-control average run length (ARL) of the AEWMA control chart designed with $p$-vaues. When the function argument `shift` is $\neq 0$, the function estimates the out-of-control ATS and ARL.
+```
+ats_arl_aewma(alpha = 0.025,w = 50,nsimul = 1000,a = 0,lambda = 2.0,b = 2.71,shift = 0)
+```
