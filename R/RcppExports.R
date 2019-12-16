@@ -2,31 +2,42 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 thtC <- function(y) {
-    .Call("_DyAEWMA_thtC", PACKAGE = "DyAEWMA", y)
+    .Call('_DyAEWMA_thtC', PACKAGE = 'DyAEWMA', y)
 }
 
 findPvalue1sC <- function(dist, obsStat) {
-    .Call("_DyAEWMA_findPvalue1sC", PACKAGE = "DyAEWMA", dist, obsStat)
+    .Call('_DyAEWMA_findPvalue1sC', PACKAGE = 'DyAEWMA', dist, obsStat)
 }
 
 empirW <- function(x, simutime, n) {
-    .Call("_DyAEWMA_empirW", PACKAGE = "DyAEWMA", x, simutime, n)
+    .Call('_DyAEWMA_empirW', PACKAGE = 'DyAEWMA', x, simutime, n)
 }
 
 arlC <- function(av, ww, simutime, shift) {
-    .Call("_DyAEWMA_arlC", PACKAGE = "DyAEWMA", av, ww, simutime, shift)
+    .Call('_DyAEWMA_arlC', PACKAGE = 'DyAEWMA', av, ww, simutime, shift)
 }
 
 arl_atsC <- function(alpha, ww, simutime, a, lambda, b, shift) {
-    .Call("_DyAEWMA_arl_atsC", PACKAGE = "DyAEWMA", alpha, ww, simutime, 
-        a, lambda, b, shift)
+    .Call('_DyAEWMA_arl_atsC', PACKAGE = 'DyAEWMA', alpha, ww, simutime, a, lambda, b, shift)
 }
 
 arla <- function(h, omg, shift) {
-    .Call("_DyAEWMA_arla", PACKAGE = "DyAEWMA", h, omg, shift)
+    .Call('_DyAEWMA_arla', PACKAGE = 'DyAEWMA', h, omg, shift)
 }
 
 arlb <- function(h, omg, shift) {
-    .Call("_DyAEWMA_arlb", PACKAGE = "DyAEWMA", h, omg, shift)
+    .Call('_DyAEWMA_arlb', PACKAGE = 'DyAEWMA', h, omg, shift)
+}
+
+EmprDist <- function(simutime, w, z) {
+    .Call('_DyAEWMA_EmprDist', PACKAGE = 'DyAEWMA', simutime, w, z)
+}
+
+arl_maxC <- function(alpha, ww, simutime, shift) {
+    .Call('_DyAEWMA_arl_maxC', PACKAGE = 'DyAEWMA', alpha, ww, simutime, shift)
+}
+
+arl_ats_max <- function(alpha, ww, simutime, a, lambda, b, shift) {
+    .Call('_DyAEWMA_arl_ats_max', PACKAGE = 'DyAEWMA', alpha, ww, simutime, a, lambda, b, shift)
 }
 

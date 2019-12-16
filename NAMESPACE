@@ -2,9 +2,13 @@
 
 export(arl)
 export(arl_aewma)
+export(arl_aewma_max)
 export(ats_arl_aewma)
+export(ats_arl_aewma_max)
 export(empr_aewma)
+export(empr_aewma_max)
 export(pVal)
 importFrom(Rcpp,sourceCpp)
+importFrom(stats,rnorm)
 importFrom(stats,sd)
 useDynLib(DyAEWMA)

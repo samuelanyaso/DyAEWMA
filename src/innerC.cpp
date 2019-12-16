@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 #include <iostream>
-#include<algorithm> 
+#include<algorithm>
 #include <R.h>
 #include <Rinternals.h>
 
@@ -36,7 +36,7 @@ double findPvalue1sC (NumericVector dist, double obsStat)
 {
 	double prop = 0;
 	int n = dist.size();
-	
+
 	for (int i = 0; i < n; i++) {
 		if (dist[i] >= obsStat) {
 			prop += 1;
@@ -54,13 +54,13 @@ NumericVector empirW (NumericVector x, int simutime, int n)
 	NumericVector out(simutime);
 	NumericVector empW;
 	int m = x.size();
-	
+
 	for (int j = 0; j < simutime; j++) {
-		double z; 
+		double z;
 		double omg = 0.1; double detHatSt = 0; double detHatStSt = 0;
 		double detTil;
 		double W = 0; int b;
-  
+
 		for (int i = 0; i < n; i++) {
 			b = round(R::runif(0,m));
 			z = x[b];
@@ -86,19 +86,20 @@ NumericVector arlC (double av, int ww, int simutime, double shift)
 	// Computation of ARL
 	NumericVector out(2);
 	double arl = 0.0; int j = 0; int count = 0;
-	
-	
+
+	// Estimates the empirical distribution of the AEWMA chart
+	NumericVector x = rnorm(2000);
+	NumericVector sortedW = empirW(x, simutime, ww);
+
 	while (j < simutime) {
 		j = j + 1;
-		double p = 1; 
+		double p = 1;
 		int rl = 0;
-		NumericVector x = rnorm(1000);
-		NumericVector sortedW = empirW(x, simutime, ww);
-  
+
 		double z; double W = 0;
 		double omg = 0.1; double detHatSt = 0; double detHatStSt = 0;
 		double detTil;
-  
+
 		// Phase-I SPC
 		while ((p > av) && (rl < ww)) {
 			rl = rl + 1;
@@ -110,15 +111,15 @@ NumericVector arlC (double av, int ww, int simutime, double shift)
 			p = findPvalue1sC(sortedW, W);
 		}
 		//return p;
-  
+
 		if(rl == ww){
 			count = count + 1;
 		} else {
 			continue;		// if steady-state is not reached it skips to the next iteration
 		}
-  
+
 		// Phase-II SPC
-  
+
 		rl = 0;
 		while((p > av) && (rl < simutime)) {
 			rl = rl + 1;
@@ -145,19 +146,19 @@ NumericVector arl_atsC (double alpha, int ww, int simutime, double a, double lam
 	double arl = 0.0; double ats = 0.0; int j = 0; int count = 0;
 	double interval = 0;
 	
+	// Estimates the empirical distribution
+	NumericVector x = rnorm(2000);
+	NumericVector sortedW = empirW(x,simutime, ww);
+
 	while (j < simutime) {
 		j = j + 1;
-		double p = 1; 
+		double p = 1;
 		int rl = 0; double ts = 0.0;
-		
-		// Estimates the empirical distribution
-		NumericVector x = rnorm(1000);
-		NumericVector sortedW = empirW(x,simutime, ww);
-  
+
 		double z; double W = 0;
 		double omg = 0.1; double detHatSt = 0; double detHatStSt = 0;
 		double detTil;
-  
+
 		// Phase-I SPC
 		while ((p > alpha) && (rl < ww)) {
 			rl = rl + 1;
@@ -169,15 +170,15 @@ NumericVector arl_atsC (double alpha, int ww, int simutime, double a, double lam
 			p = findPvalue1sC(sortedW, W);
 		}
 		//return p;
-  
+
 		if(rl == ww){
 			count = count + 1;
 		} else {
 			continue;		// if steady-state is not reached it skips to the next iteration
 		}
-  
+
 		// Phase-II SPC
-  
+
 		rl = 0;	interval = 0;
 		while((p > alpha) && (rl < simutime)) {
 			rl = rl + 1;
@@ -205,9 +206,9 @@ NumericVector arla (double h, double omg, double shift)
 {
 	int itr =100000;
 	NumericVector RL(100000);
-	
+
 	for (int i = 0; i < itr; i++ ) {
-		
+
 		double detHatSt = 0.0; double W = 0;
 		double detHatStSt; double detTil; double z;
 		int t = 1;
@@ -218,9 +219,9 @@ NumericVector arla (double h, double omg, double shift)
 			detHatStSt = detHatSt/(1 - pow((1-omg), t));
 			detTil = abs(detHatStSt);
 			W = thtC(detTil)*z + (1-thtC(detTil))*W;
-		
+
 			if(abs(W) > h){
-				RL[i] = t; 
+				RL[i] = t;
 				break;
 			} else {
 				t = t + 1;
@@ -232,14 +233,14 @@ NumericVector arla (double h, double omg, double shift)
 
 
 // [[Rcpp::export]]
-/*Component for estimating the ARL of the one-sided Adaptive EWMA chart*/
+/*Component for estimating the ARL of the one sided Adaptive EWMA chart*/
 NumericVector arlb (double h, double omg, double shift)
 {
 	int itr =100000;
 	NumericVector RL(100000);
-	
+
 	for (int i = 0; i < itr; i++ ) {
-		
+
 		double detHatSt = 0.0; double W = 0;
 		double detHatStSt; double detTil; double z;
 		int t = 1;
@@ -250,9 +251,9 @@ NumericVector arlb (double h, double omg, double shift)
 			detHatStSt = detHatSt/(1 - pow((1-omg), t));
 			detTil = abs(detHatStSt);
 			W = thtC(detTil)*z + (1-thtC(detTil))*W;
-		
+
 			if(W > h){
-				RL[i] = t; 
+				RL[i] = t;
 				break;
 			} else {
 				t = t + 1;
@@ -265,9 +266,9 @@ NumericVector arlb (double h, double omg, double shift)
 
 // [[Rcpp::export]]
 /*Estimates the empirical distribution of the classical EWMA control chart
-using a Bootstrap technique. 
+using a Bootstrap technique.
 Here, we use the method suggested by Haq to estimate the shift size,
-and the one-sided chart has a max operation.
+and the one sided chart has a max operation.
 
 Definition of parameters
 simutime - Number of replications
@@ -280,9 +281,9 @@ NumericVector EmprDist (int simutime, int w, NumericVector z)
 	NumericVector out(simutime);
 	NumericVector empE;
 	double x;
-	
+
 	for (int j = 0; j < simutime; j++) {
-		
+
 		double E = 0;
 		double omg = 0.1; double detHatSt = 0; double detHatStSt = 0;
 		double detTil;
@@ -306,26 +307,27 @@ NumericVector EmprDist (int simutime, int w, NumericVector z)
 
 
 // [[Rcpp::export]]
-/*Computes the ARL for a one-sided(max) AEWMA chart without a dynamic sampling scheme.*/
-NumericVector arl4alpha (double alpha, int ww, int simutime, double shift)
+/*Computes the ARL for the one-sided maxx AEWMA chart without a dynamic sampling scheme.*/
+NumericVector arl_maxC (double alpha, int ww, int simutime, double shift)
 {
 	// Computation of ARL and ATS
 	NumericVector out(2);
 	double arl = 0.0; int j = 0; int count = 0;
 	
+	// Estimates the empirical distribution
+	NumericVector x = rnorm(2000);
+	NumericVector sortedW = EmprDist(simutime, ww, x);
+
+
 	while (j < simutime) {
 		j = j + 1;
-		double p = 1; 
-		int rl = 0; 
-		
-		// Estimates the empirical distribution
-		NumericVector x = rnorm(1000);
-		NumericVector sortedW = EmprDist(simutime, ww, x);
-  
+		double p = 1;
+		int rl = 0;
+
 		double z; double W = 0;
 		double omg = 0.1; double detHatSt = 0; double detHatStSt = 0;
 		double detTil;
-  
+
 		// Phase-I SPC
 		while ((p > alpha) && (rl < ww)) {
 			rl = rl + 1;
@@ -337,16 +339,16 @@ NumericVector arl4alpha (double alpha, int ww, int simutime, double shift)
 			p = findPvalue1sC(sortedW, W);
 		}
 		//return p;
-  
+
 		if(rl == ww){
 			count = count + 1;
 		} else {
 			continue;		// if steady-state is not reached it skips to the next iteration
 		}
-  
+
 		// Phase-II SPC
-  
-		rl = 0;	
+
+		rl = 0;
 		while((p > alpha) && (rl < simutime)) {
 			rl = rl + 1;
 			z = R::rnorm(0,1);
@@ -365,27 +367,28 @@ NumericVector arl4alpha (double alpha, int ww, int simutime, double shift)
 
 
 // [[Rcpp::export]]
-/*Computes the ARL and ATS for a one-sided (max) AEWMA chart with a dynamic sampling scheme.*/
-NumericVector arl_ats1max (double alpha, int ww, int simutime, double a, double lambda, double b, double shift)
+/*Computes the ARL & ATS for the one-sided maxx AEWMA chart with a dynamic sampling scheme.*/
+NumericVector arl_ats_max (double alpha, int ww, int simutime, double a, double lambda, double b, double shift)
 {
 	// Computation of ARL and ATS
 	NumericVector out(3);
 	double arl = 0.0; double ats = 0.0; int j = 0; int count = 0;
-	double interval = 0;
 	
+	// Estimates the empirical distribution
+	NumericVector x = rnorm(2000);
+	NumericVector sortedW = EmprDist(simutime, ww, x);
+
+	double interval = 0;
+
 	while (j < simutime) {
 		j = j + 1;
-		double p = 1; 
+		double p = 1;
 		int rl = 0; double ts = 0.0;
 		
-		// Estimates the empirical distribution
-		NumericVector x = rnorm(1000);
-		NumericVector sortedW = EmprDist(simutime, ww, x);
-  
 		double z; double W = 0;
 		double omg = 0.1; double detHatSt = 0; double detHatStSt = 0;
 		double detTil;
-  
+
 		// Phase-I SPC
 		while ((p > alpha) && (rl < ww)) {
 			rl = rl + 1;
@@ -397,15 +400,15 @@ NumericVector arl_ats1max (double alpha, int ww, int simutime, double a, double 
 			p = findPvalue1sC(sortedW, W);
 		}
 		//return p;
-  
+
 		if(rl == ww){
 			count = count + 1;
 		} else {
 			continue;		// if steady-state is not reached it skips to the next iteration
 		}
-  
+
 		// Phase-II SPC
-  
+
 		rl = 0;	interval = 0;
 		while((p > alpha) && (rl < simutime)) {
 			rl = rl + 1;

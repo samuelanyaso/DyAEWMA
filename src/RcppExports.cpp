@@ -29,7 +29,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // empirW
-/*Estimates the IC Empirical Distribution of the AEWMA chart using the Bootstrap Method*/ NumericVector empirW(NumericVector x, int simutime, int n);
+/*Estimates the IC Empirical Distribution of the AEWMA chart  using the Bootstrap Method*/ NumericVector empirW(NumericVector x, int simutime, int n);
 RcppExport SEXP _DyAEWMA_empirW(SEXP xSEXP, SEXP simutimeSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -86,7 +86,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // arlb
-/*Component for estimating the ARL of the one-sided Adaptive EWMA chart*/ NumericVector arlb(double h, double omg, double shift);
+/*Component for estimating the ARL of the one sided Adaptive EWMA chart*/ NumericVector arlb(double h, double omg, double shift);
 RcppExport SEXP _DyAEWMA_arlb(SEXP hSEXP, SEXP omgSEXP, SEXP shiftSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -95,6 +95,50 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type omg(omgSEXP);
     Rcpp::traits::input_parameter< double >::type shift(shiftSEXP);
     rcpp_result_gen = Rcpp::wrap(arlb(h, omg, shift));
+    return rcpp_result_gen;
+END_RCPP
+}
+// EmprDist
+/*Estimates the empirical distribution of the classical EWMA control chart using a Bootstrap technique. Here, we use the method suggested by Haq to estimate the shift size, and the one sided chart has a max operation.  Definition of parameters simutime - Number of replications w - size required to reach steady state. z - vector of available IC data set */ NumericVector EmprDist(int simutime, int w, NumericVector z);
+RcppExport SEXP _DyAEWMA_EmprDist(SEXP simutimeSEXP, SEXP wSEXP, SEXP zSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type simutime(simutimeSEXP);
+    Rcpp::traits::input_parameter< int >::type w(wSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type z(zSEXP);
+    rcpp_result_gen = Rcpp::wrap(EmprDist(simutime, w, z));
+    return rcpp_result_gen;
+END_RCPP
+}
+// arl_maxC
+/*Computes the ARL for the one-sided maxx AEWMA chart without a dynamic sampling scheme.*/ NumericVector arl_maxC(double alpha, int ww, int simutime, double shift);
+RcppExport SEXP _DyAEWMA_arl_maxC(SEXP alphaSEXP, SEXP wwSEXP, SEXP simutimeSEXP, SEXP shiftSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< int >::type ww(wwSEXP);
+    Rcpp::traits::input_parameter< int >::type simutime(simutimeSEXP);
+    Rcpp::traits::input_parameter< double >::type shift(shiftSEXP);
+    rcpp_result_gen = Rcpp::wrap(arl_maxC(alpha, ww, simutime, shift));
+    return rcpp_result_gen;
+END_RCPP
+}
+// arl_ats_max
+/*Computes the ARL & ATS for the one-sided maxx AEWMA chart with a dynamic sampling scheme.*/ NumericVector arl_ats_max(double alpha, int ww, int simutime, double a, double lambda, double b, double shift);
+RcppExport SEXP _DyAEWMA_arl_ats_max(SEXP alphaSEXP, SEXP wwSEXP, SEXP simutimeSEXP, SEXP aSEXP, SEXP lambdaSEXP, SEXP bSEXP, SEXP shiftSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< int >::type ww(wwSEXP);
+    Rcpp::traits::input_parameter< int >::type simutime(simutimeSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type b(bSEXP);
+    Rcpp::traits::input_parameter< double >::type shift(shiftSEXP);
+    rcpp_result_gen = Rcpp::wrap(arl_ats_max(alpha, ww, simutime, a, lambda, b, shift));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -107,6 +151,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DyAEWMA_arl_atsC", (DL_FUNC) &_DyAEWMA_arl_atsC, 7},
     {"_DyAEWMA_arla", (DL_FUNC) &_DyAEWMA_arla, 3},
     {"_DyAEWMA_arlb", (DL_FUNC) &_DyAEWMA_arlb, 3},
+    {"_DyAEWMA_EmprDist", (DL_FUNC) &_DyAEWMA_EmprDist, 3},
+    {"_DyAEWMA_arl_maxC", (DL_FUNC) &_DyAEWMA_arl_maxC, 4},
+    {"_DyAEWMA_arl_ats_max", (DL_FUNC) &_DyAEWMA_arl_ats_max, 7},
     {NULL, NULL, 0}
 };
 
