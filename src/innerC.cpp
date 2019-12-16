@@ -47,7 +47,8 @@ double findPvalue1sC (NumericVector dist, double obsStat)
 
 
 // [[Rcpp::export]]
-/*Estimates the IC Empirical Distribution of the AEWMA chart using the Bootstrap Method*/
+/*Estimates the IC Empirical Distribution of the AEWMA chart
+ using the Bootstrap Method*/
 NumericVector empirW (NumericVector x, int simutime, int n)
 {
 	NumericVector out(simutime);
@@ -259,4 +260,168 @@ NumericVector arlb (double h, double omg, double shift)
 		}
 	}
 	return RL;
+}
+
+
+// [[Rcpp::export]]
+/*Estimates the empirical distribution of the classical EWMA control chart
+using a Bootstrap technique. 
+Here, we use the method suggested by Haq to estimate the shift size,
+and the one-sided chart has a max operation.
+
+Definition of parameters
+simutime - Number of replications
+w - size required to reach steady state.
+z - vector of available IC data set
+*/
+NumericVector EmprDist (int simutime, int w, NumericVector z)
+{
+	int n = z.size();
+	NumericVector out(simutime);
+	NumericVector empE;
+	double x;
+	
+	for (int j = 0; j < simutime; j++) {
+		
+		double E = 0;
+		double omg = 0.1; double detHatSt = 0; double detHatStSt = 0;
+		double detTil;
+
+		NumericVector v = sample(z, n);     /*Bootstrap sample - sample with replacement from z*/
+		for (int i = 0; i < w; i++) {
+			x = v(i);
+			detHatSt = omg*x + (1-omg)*detHatSt;
+			detHatStSt = detHatSt/(1 - pow((1-omg), i));
+			detTil = abs(detHatStSt);
+			//E = max(0.00, nu*x + (1-nu)*E);
+			E = max(0.00, thtC(detTil)*x + (1-thtC(detTil))*E);
+		}
+		out[j] = E;
+	}
+	empE = clone(out);
+	std::sort(empE.begin(), empE.end());			//sorts in ascending order
+	std::reverse(empE.begin(), empE.end());			//sorts in descending order
+	return empE;
+}
+
+
+// [[Rcpp::export]]
+/*Computes the ARL for a one-sided(max) AEWMA chart without a dynamic sampling scheme.*/
+NumericVector arl4alpha (double alpha, int ww, int simutime, double shift)
+{
+	// Computation of ARL and ATS
+	NumericVector out(2);
+	double arl = 0.0; int j = 0; int count = 0;
+	
+	while (j < simutime) {
+		j = j + 1;
+		double p = 1; 
+		int rl = 0; 
+		
+		// Estimates the empirical distribution
+		NumericVector x = rnorm(1000);
+		NumericVector sortedW = EmprDist(simutime, ww, x);
+  
+		double z; double W = 0;
+		double omg = 0.1; double detHatSt = 0; double detHatStSt = 0;
+		double detTil;
+  
+		// Phase-I SPC
+		while ((p > alpha) && (rl < ww)) {
+			rl = rl + 1;
+			z = R::rnorm(0,1);
+			detHatSt = omg*z + (1-omg)*detHatSt;
+			detHatStSt = detHatSt/(1 - pow((1-omg), rl));
+			detTil = abs(detHatStSt);
+			W = max(0.00, thtC(detTil)*z + (1-thtC(detTil))*W);
+			p = findPvalue1sC(sortedW, W);
+		}
+		//return p;
+  
+		if(rl == ww){
+			count = count + 1;
+		} else {
+			continue;		// if steady-state is not reached it skips to the next iteration
+		}
+  
+		// Phase-II SPC
+  
+		rl = 0;	
+		while((p > alpha) && (rl < simutime)) {
+			rl = rl + 1;
+			z = R::rnorm(0,1);
+			z = z + shift;
+			detHatSt = omg*z + (1-omg)*detHatSt;
+			detHatStSt = detHatSt/(1 - pow((1-omg), rl));
+			detTil = abs(detHatStSt);
+			W = max(0.00, thtC(detTil)*z + (1-thtC(detTil))*W);
+			p = findPvalue1sC(sortedW, W);
+		}
+		arl = arl + rl;
+	}
+	out[0] = arl; out[1] = count;
+	return(out);
+}
+
+
+// [[Rcpp::export]]
+/*Computes the ARL and ATS for a one-sided (max) AEWMA chart with a dynamic sampling scheme.*/
+NumericVector arl_ats1max (double alpha, int ww, int simutime, double a, double lambda, double b, double shift)
+{
+	// Computation of ARL and ATS
+	NumericVector out(3);
+	double arl = 0.0; double ats = 0.0; int j = 0; int count = 0;
+	double interval = 0;
+	
+	while (j < simutime) {
+		j = j + 1;
+		double p = 1; 
+		int rl = 0; double ts = 0.0;
+		
+		// Estimates the empirical distribution
+		NumericVector x = rnorm(1000);
+		NumericVector sortedW = EmprDist(simutime, ww, x);
+  
+		double z; double W = 0;
+		double omg = 0.1; double detHatSt = 0; double detHatStSt = 0;
+		double detTil;
+  
+		// Phase-I SPC
+		while ((p > alpha) && (rl < ww)) {
+			rl = rl + 1;
+			z = R::rnorm(0,1);
+			detHatSt = omg*z + (1-omg)*detHatSt;
+			detHatStSt = detHatSt/(1 - pow((1-omg), rl));
+			detTil = abs(detHatStSt);
+			W = max(0.00, thtC(detTil)*z + (1-thtC(detTil))*W);
+			p = findPvalue1sC(sortedW, W);
+		}
+		//return p;
+  
+		if(rl == ww){
+			count = count + 1;
+		} else {
+			continue;		// if steady-state is not reached it skips to the next iteration
+		}
+  
+		// Phase-II SPC
+  
+		rl = 0;	interval = 0;
+		while((p > alpha) && (rl < simutime)) {
+			rl = rl + 1;
+			interval = a + b*pow(p, lambda);
+			ts = ts + interval;
+			z = R::rnorm(0,1);
+			z = z + shift;
+			detHatSt = omg*z + (1-omg)*detHatSt;
+			detHatStSt = detHatSt/(1 - pow((1-omg), rl));
+			detTil = abs(detHatStSt);
+			W = max(0.00, thtC(detTil)*z + (1-thtC(detTil))*W);
+			p = findPvalue1sC(sortedW, W);
+		}
+		arl = arl + rl;
+		ats = ats + ts;
+	}
+	out[0] = arl; out[1] = ats; out[2] = count;
+	return(out);
 }
