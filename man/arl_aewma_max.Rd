@@ -16,7 +16,7 @@ arl_aewma_max(alpha, w = 50, nsimul, shift = 0)
 \item{shift}{a real number; shift size. If shift=0, IC ARL is returned, else OC ARL is returned. Default value is 0.0.}
 }
 \value{
-ARL
+ARL, count of success iterations
 }
 \description{
 ARL value of the one-sided(max) Adaptive EWMA control chart (without p-values)

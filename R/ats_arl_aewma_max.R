@@ -9,7 +9,7 @@
 ##' @param lambda a real number; lambda parameter in the dynamic sampling interval function
 ##' @param b a real number; b parameter in the dynamic sampling interval function
 ##' @param shift a real number;  shift size. If shift=0, IC ARL/ATS is returned, else OC ARL/ATS is returned. Default value is 0.0.
-##' @return ATS and ARL[when d(.) = 1]
+##' @return ATS and ARL[when d(.) = 1] and count of successful iterations
 ##' @author Samuel Anyaso-Samuel
 ##' @export
 ##' @useDynLib DyAEWMA
@@ -17,7 +17,6 @@
 ##' @examples
 ##' ats_arl_aewma_max(0.025,50,100,0,2.5,3.1,0.05)
 ats_arl_aewma_max <- function(alpha, w = 50, nsimul, a, lambda, b, shift = 0) {
-    # set.seed(83706)
     res <- arl_ats_max(alpha, w, nsimul, a, lambda, b, shift)
-    return(c(res[2]/res[3], res[1]/res[3]))
+    return(c(res[2],res[1],res[3]))
 }

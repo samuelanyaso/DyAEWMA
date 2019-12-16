@@ -22,7 +22,7 @@ ats_arl_aewma_max(alpha, w = 50, nsimul, a, lambda, b, shift = 0)
 \item{shift}{a real number;  shift size. If shift=0, IC ARL/ATS is returned, else OC ARL/ATS is returned. Default value is 0.0.}
 }
 \value{
-ATS and ARL[when d(.) = 1]
+ATS and ARL[when d(.) = 1] and count of successful iterations
 }
 \description{
 ARL & ATS of the one-sided(max) Adaptive EWMA control chart.

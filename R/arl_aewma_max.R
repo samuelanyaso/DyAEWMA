@@ -6,7 +6,7 @@
 ##' @param w an integer; the sample size needed to reach steady-state, default value is 50.
 ##' @param nsimul an integer; the number of replications
 ##' @param shift a real number; shift size. If shift=0, IC ARL is returned, else OC ARL is returned. Default value is 0.0.
-##' @return ARL
+##' @return ARL, count of success iterations
 ##' @author Samuel Anyaso-Samuel
 ##' @export
 ##' @useDynLib DyAEWMA
@@ -14,7 +14,6 @@
 ##' @examples
 ##' arl_aewma_max(0.025,50,100,0.0)
 arl_aewma_max <- function(alpha, w = 50, nsimul, shift = 0) {
-    # set.seed(1993)
     res <- arl_maxC(alpha, w, nsimul, shift)
-    return(res[1]/res[2])
+    return(c(res[1],res[2]))
 }
