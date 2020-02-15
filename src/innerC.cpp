@@ -145,7 +145,7 @@ NumericVector arl_atsC (double alpha, int ww, int simutime, double a, double lam
 	NumericVector out(3);
 	double arl = 0.0; double ats = 0.0; int j = 0; int count = 0;
 	double interval = 0;
-	
+
 	// Estimates the empirical distribution
 	NumericVector x = rnorm(2000);
 	NumericVector sortedW = empirW(x,simutime, ww);
@@ -268,7 +268,7 @@ NumericVector arlb (double h, double omg, double shift)
 /*Estimates the empirical distribution of the classical EWMA control chart
 using a Bootstrap technique.
 Here, we use the method suggested by Haq to estimate the shift size,
-and the one sided chart has a max operation.
+and the one sided chart has a maxx operation.
 
 Definition of parameters
 simutime - Number of replications
@@ -313,10 +313,11 @@ NumericVector arl_maxC (double alpha, int ww, int simutime, double shift)
 	// Computation of ARL and ATS
 	NumericVector out(2);
 	double arl = 0.0; int j = 0; int count = 0;
-	
+	int repl = 1000000;
+
 	// Estimates the empirical distribution
 	NumericVector x = rnorm(2000);
-	NumericVector sortedW = EmprDist(simutime, ww, x);
+	NumericVector sortedW = EmprDist(repl, ww, x);
 
 
 	while (j < simutime) {
@@ -373,10 +374,11 @@ NumericVector arl_ats_max (double alpha, int ww, int simutime, double a, double 
 	// Computation of ARL and ATS
 	NumericVector out(3);
 	double arl = 0.0; double ats = 0.0; int j = 0; int count = 0;
-	
+	int repl = 1000000;
+
 	// Estimates the empirical distribution
 	NumericVector x = rnorm(2000);
-	NumericVector sortedW = EmprDist(simutime, ww, x);
+	NumericVector sortedW = EmprDist(repl, ww, x);
 
 	double interval = 0;
 
@@ -384,7 +386,7 @@ NumericVector arl_ats_max (double alpha, int ww, int simutime, double a, double 
 		j = j + 1;
 		double p = 1;
 		int rl = 0; double ts = 0.0;
-		
+
 		double z; double W = 0;
 		double omg = 0.1; double detHatSt = 0; double detHatStSt = 0;
 		double detTil;

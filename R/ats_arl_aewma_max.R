@@ -18,5 +18,5 @@
 ##' ats_arl_aewma_max(0.025,50,100,0,2.5,3.1,0.05)
 ats_arl_aewma_max <- function(alpha, w = 50, nsimul, a, lambda, b, shift = 0) {
     res <- arl_ats_max(alpha, w, nsimul, a, lambda, b, shift)
-    return(c(res[2],res[1],res[3]))
+    return(c(res[2], res[1], res[3]))
 }

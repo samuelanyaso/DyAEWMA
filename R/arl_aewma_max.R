@@ -15,5 +15,5 @@
 ##' arl_aewma_max(0.025,50,100,0.0)
 arl_aewma_max <- function(alpha, w = 50, nsimul, shift = 0) {
     res <- arl_maxC(alpha, w, nsimul, shift)
-    return(c(res[1],res[2]))
+    return(c(res[1], res[2]))
 }

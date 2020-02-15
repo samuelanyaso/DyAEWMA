@@ -99,7 +99,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // EmprDist
-/*Estimates the empirical distribution of the classical EWMA control chart using a Bootstrap technique. Here, we use the method suggested by Haq to estimate the shift size, and the one sided chart has a max operation.  Definition of parameters simutime - Number of replications w - size required to reach steady state. z - vector of available IC data set */ NumericVector EmprDist(int simutime, int w, NumericVector z);
+/*Estimates the empirical distribution of the classical EWMA control chart using a Bootstrap technique. Here, we use the method suggested by Haq to estimate the shift size, and the one sided chart has a maxx operation.  Definition of parameters simutime - Number of replications w - size required to reach steady state. z - vector of available IC data set */ NumericVector EmprDist(int simutime, int w, NumericVector z);
 RcppExport SEXP _DyAEWMA_EmprDist(SEXP simutimeSEXP, SEXP wSEXP, SEXP zSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
