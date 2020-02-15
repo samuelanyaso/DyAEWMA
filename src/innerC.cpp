@@ -275,14 +275,14 @@ simutime - Number of replications
 w - size required to reach steady state.
 z - vector of available IC data set
 */
-NumericVector EmprDist (int simutime, int w, NumericVector z)
+NumericVector EmprDist (int repl, int w, NumericVector z)
 {
 	int n = z.size();
-	NumericVector out(simutime);
+	NumericVector out(repl);
 	NumericVector empE;
 	double x;
 
-	for (int j = 0; j < simutime; j++) {
+	for (int j = 0; j < repl; j++) {
 
 		double E = 0;
 		double omg = 0.1; double detHatSt = 0; double detHatStSt = 0;
@@ -308,12 +308,11 @@ NumericVector EmprDist (int simutime, int w, NumericVector z)
 
 // [[Rcpp::export]]
 /*Computes the ARL for the one-sided maxx AEWMA chart without a dynamic sampling scheme.*/
-NumericVector arl_maxC (double alpha, int ww, int simutime, double shift)
+NumericVector arl_maxC (double alpha, int ww, int simutime, int repl, double shift)
 {
 	// Computation of ARL and ATS
 	NumericVector out(2);
 	double arl = 0.0; int j = 0; int count = 0;
-	int repl = 1000000;
 
 	// Estimates the empirical distribution
 	NumericVector x = rnorm(2000);
@@ -369,12 +368,11 @@ NumericVector arl_maxC (double alpha, int ww, int simutime, double shift)
 
 // [[Rcpp::export]]
 /*Computes the ARL & ATS for the one-sided maxx AEWMA chart with a dynamic sampling scheme.*/
-NumericVector arl_ats_max (double alpha, int ww, int simutime, double a, double lambda, double b, double shift)
+NumericVector arl_ats_max (double alpha, int ww, int simutime, int repl, double a, double lambda, double b, double shift)
 {
 	// Computation of ARL and ATS
 	NumericVector out(3);
 	double arl = 0.0; double ats = 0.0; int j = 0; int count = 0;
-	int repl = 1000000;
 
 	// Estimates the empirical distribution
 	NumericVector x = rnorm(2000);

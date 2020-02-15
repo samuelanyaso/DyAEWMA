@@ -4,14 +4,16 @@
 \alias{ats_arl_aewma_max}
 \title{ARL & ATS of the one-sided(max) Adaptive EWMA control chart.}
 \usage{
-ats_arl_aewma_max(alpha, w = 50, nsimul, a, lambda, b, shift = 0)
+ats_arl_aewma_max(alpha, w = 50, nsimul, repl = 1e+06, a, lambda, b, shift = 0)
 }
 \arguments{
 \item{alpha}{a real number; the level of significance}
 
 \item{w}{an integer; the sample size needed to reach steady-state, default value is 50.}
 
-\item{nsimul}{an integer; the number of replications}
+\item{nsimul}{an integer; the number of simulations}
+
+\item{repl}{an integer; the number of replications for estimating the emprical distribution}
 
 \item{a}{a real number; a parameter in the dynamic sampling interval function}
 
@@ -31,7 +33,7 @@ ARL & ATS of the one-sided(max) Adaptive EWMA control chart.
 Estimates the ARL & ATS for the one-sided(max) AEWMA chart using the bootstrap approach.
 }
 \examples{
-ats_arl_aewma_max(0.025,50,100,0,2.5,3.1,0.05)
+ats_arl_aewma_max(0.025,50,100,1000,0,2.5,3.1,0.05)
 }
 \author{
 Samuel Anyaso-Samuel

@@ -29,15 +29,15 @@ arlb <- function(h, omg, shift) {
     .Call('_DyAEWMA_arlb', PACKAGE = 'DyAEWMA', h, omg, shift)
 }
 
-EmprDist <- function(simutime, w, z) {
-    .Call('_DyAEWMA_EmprDist', PACKAGE = 'DyAEWMA', simutime, w, z)
+EmprDist <- function(repl, w, z) {
+    .Call('_DyAEWMA_EmprDist', PACKAGE = 'DyAEWMA', repl, w, z)
 }
 
-arl_maxC <- function(alpha, ww, simutime, shift) {
-    .Call('_DyAEWMA_arl_maxC', PACKAGE = 'DyAEWMA', alpha, ww, simutime, shift)
+arl_maxC <- function(alpha, ww, simutime, repl, shift) {
+    .Call('_DyAEWMA_arl_maxC', PACKAGE = 'DyAEWMA', alpha, ww, simutime, repl, shift)
 }
 
-arl_ats_max <- function(alpha, ww, simutime, a, lambda, b, shift) {
-    .Call('_DyAEWMA_arl_ats_max', PACKAGE = 'DyAEWMA', alpha, ww, simutime, a, lambda, b, shift)
+arl_ats_max <- function(alpha, ww, simutime, repl, a, lambda, b, shift) {
+    .Call('_DyAEWMA_arl_ats_max', PACKAGE = 'DyAEWMA', alpha, ww, simutime, repl, a, lambda, b, shift)
 }
 

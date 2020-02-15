@@ -4,10 +4,10 @@
 \alias{empr_aewma_max}
 \title{Empirical Distribution of the one-sided(max) Adaptive EMWA control chart}
 \usage{
-empr_aewma_max(nsimul, w, x)
+empr_aewma_max(repl = 1e+06, w, x)
 }
 \arguments{
-\item{nsimul}{an integer; number of bootstrap simulations}
+\item{repl}{an integer; number of bootstrap replications}
 
 \item{w}{an integer; the sample size needed to reach steady-state}
 

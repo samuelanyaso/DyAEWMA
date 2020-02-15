@@ -4,14 +4,16 @@
 \alias{arl_aewma_max}
 \title{ARL value of the one-sided(max) Adaptive EWMA control chart (without p-values)}
 \usage{
-arl_aewma_max(alpha, w = 50, nsimul, shift = 0)
+arl_aewma_max(alpha, w = 50, nsimul, repl = 1e+06, shift = 0)
 }
 \arguments{
 \item{alpha}{a real number; the level of significance}
 
 \item{w}{an integer; the sample size needed to reach steady-state, default value is 50.}
 
-\item{nsimul}{an integer; the number of replications}
+\item{nsimul}{an integer; the number of simulations}
+
+\item{repl}{an integer; the number of replications for estimating the emprical distribution}
 
 \item{shift}{a real number; shift size. If shift=0, IC ARL is returned, else OC ARL is returned. Default value is 0.0.}
 }
@@ -25,7 +27,7 @@ ARL value of the one-sided(max) Adaptive EWMA control chart (without p-values)
 Estimates the ARL for one-sided(max) the AEWMA chart (without p-values)
 }
 \examples{
-arl_aewma_max(0.025,50,100,0.0)
+arl_aewma_max(0.025,50,100,10000, 0.0)
 }
 \author{
 Samuel Anyaso-Samuel
