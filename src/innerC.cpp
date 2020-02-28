@@ -145,6 +145,7 @@ NumericVector arl_atsC (double alpha, int ww, int simutime, double a, double lam
 	NumericVector out(3);
 	double arl = 0.0; double ats = 0.0; int j = 0; int count = 0;
 	double interval = 0;
+    double lmdzero =0;
 
 	// Estimates the empirical distribution
 	NumericVector x = rnorm(2000);
@@ -180,7 +181,7 @@ NumericVector arl_atsC (double alpha, int ww, int simutime, double a, double lam
 		// Phase-II SPC
 
 		rl = 0;	interval = 0;
-        if (lambda!=0) {
+        if (lambda != lmdzero) {
             while((p > alpha) && (rl < simutime)) {
                 rl = rl + 1;
                 interval = a + b*pow(p, lambda);
@@ -395,6 +396,7 @@ NumericVector arl_ats_max (double alpha, int ww, int simutime, int repl, double 
 	NumericVector sortedW = EmprDist(repl, ww, x);
 
 	double interval = 0;
+    double lmdzero = 0;
 
 	while (j < simutime) {
 		j = j + 1;
@@ -427,7 +429,7 @@ NumericVector arl_ats_max (double alpha, int ww, int simutime, int repl, double 
 
 		rl = 0;	interval = 0;
         
-        if(lambda!=0){
+        if(lambda != lmdzero){
             while((p > alpha) && (rl < simutime)) {
                 rl = rl + 1;
                 interval = a + b*pow(p, lambda);
