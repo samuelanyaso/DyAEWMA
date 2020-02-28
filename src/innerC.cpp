@@ -180,18 +180,34 @@ NumericVector arl_atsC (double alpha, int ww, int simutime, double a, double lam
 		// Phase-II SPC
 
 		rl = 0;	interval = 0;
-		while((p > alpha) && (rl < simutime)) {
-			rl = rl + 1;
-			interval = a + b*pow(p, lambda);
-			ts = ts + interval;
-			z = R::rnorm(0,1);
-			z = z + shift;
-			detHatSt = omg*z + (1-omg)*detHatSt;
-			detHatStSt = detHatSt/(1 - pow((1-omg), rl));
-			detTil = abs(detHatStSt);
-			W = thtC(detTil)*z + (1-thtC(detTil))*W;
-			p = findPvalue1sC(sortedW, W);
-		}
+        if (lambda!=0) {
+            while((p > alpha) && (rl < simutime)) {
+                rl = rl + 1;
+                interval = a + b*pow(p, lambda);
+                ts = ts + interval;
+                z = R::rnorm(0,1);
+                z = z + shift;
+                detHatSt = omg*z + (1-omg)*detHatSt;
+                detHatStSt = detHatSt/(1 - pow((1-omg), rl));
+                detTil = abs(detHatStSt);
+                W = thtC(detTil)*z + (1-thtC(detTil))*W;
+                p = findPvalue1sC(sortedW, W);
+            }
+        } else {
+            while((p > alpha) && (rl < simutime)) {
+                rl = rl + 1;
+                interval = a + b*log(p);
+                ts = ts + interval;
+                z = R::rnorm(0,1);
+                z = z + shift;
+                detHatSt = omg*z + (1-omg)*detHatSt;
+                detHatStSt = detHatSt/(1 - pow((1-omg), rl));
+                detTil = abs(detHatStSt);
+                W = thtC(detTil)*z + (1-thtC(detTil))*W;
+                p = findPvalue1sC(sortedW, W);
+            }
+        }
+		
 		arl = arl + rl;
 		ats = ats + ts;
 	}
@@ -410,18 +426,36 @@ NumericVector arl_ats_max (double alpha, int ww, int simutime, int repl, double 
 		// Phase-II SPC
 
 		rl = 0;	interval = 0;
-		while((p > alpha) && (rl < simutime)) {
-			rl = rl + 1;
-			interval = a + b*pow(p, lambda);
-			ts = ts + interval;
-			z = R::rnorm(0,1);
-			z = z + shift;
-			detHatSt = omg*z + (1-omg)*detHatSt;
-			detHatStSt = detHatSt/(1 - pow((1-omg), rl));
-			detTil = abs(detHatStSt);
-			W = max(0.00, thtC(detTil)*z + (1-thtC(detTil))*W);
-			p = findPvalue1sC(sortedW, W);
-		}
+        
+        if(lambda!=0){
+            while((p > alpha) && (rl < simutime)) {
+                rl = rl + 1;
+                interval = a + b*pow(p, lambda);
+                ts = ts + interval;
+                z = R::rnorm(0,1);
+                z = z + shift;
+                detHatSt = omg*z + (1-omg)*detHatSt;
+                detHatStSt = detHatSt/(1 - pow((1-omg), rl));
+                detTil = abs(detHatStSt);
+                W = max(0.00, thtC(detTil)*z + (1-thtC(detTil))*W);
+                p = findPvalue1sC(sortedW, W);
+            }
+        } else {
+            while((p > alpha) && (rl < simutime)) {
+                rl = rl + 1;
+                interval = a + b*log(p);
+                ts = ts + interval;
+                z = R::rnorm(0,1);
+                z = z + shift;
+                detHatSt = omg*z + (1-omg)*detHatSt;
+                detHatStSt = detHatSt/(1 - pow((1-omg), rl));
+                detTil = abs(detHatStSt);
+                W = max(0.00, thtC(detTil)*z + (1-thtC(detTil))*W);
+                p = findPvalue1sC(sortedW, W);
+            }
+        }
+        
+		
 		arl = arl + rl;
 		ats = ats + ts;
 	}
